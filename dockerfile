@@ -38,5 +38,5 @@ RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -
 ENV PATH="~/.cargo/bin:${PATH}"
 
 # TODO:
-# Fix latest
+# Fix latest.
 # [39371 ms] Start: Run in container: git config --global --add safe.directory /workspaces/devcontainer-main
