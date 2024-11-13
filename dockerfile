@@ -33,7 +33,7 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
     && mkdir /commandhistory \
     && touch /commandhistory/.bash_history \
     && chown -R ${USERNAME} /commandhistory \
-    && echo "${SNIPPET}" >> "~/.bashrc"
+    && echo "$SNIPPET" >> "~/.bashrc"
 
 
 # Install Rust as user rather than as root. Makes the path/permissions easier
