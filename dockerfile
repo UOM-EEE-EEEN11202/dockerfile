@@ -10,7 +10,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          git-all expect \
          curl \
          python3.12 python3.12-venv python3-pip \
-    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV RUNNING_IN_DOCKER=true
 
 
