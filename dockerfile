@@ -1,6 +1,5 @@
 # Set base OS
 FROM ubuntu:latest
-# FROM ubuntu:24.04
 
 # Install git, C/C++, and Python and requirements. (Rust is installed below)
 USER root
@@ -38,9 +37,9 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 
 # Install Rust and UV as user rather than as root. Makes the path/permissions easier
 USER ${USERNAME}
-RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y \
-    && curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y
 ENV PATH="~/.cargo/bin:${PATH}"
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="~/.local/bin:${PATH}"
 
 
@@ -48,7 +47,3 @@ ENV PATH="~/.local/bin:${PATH}"
 LABEL org.opencontainers.image.source=https://github.com/UOM-EEE-EEEN1XXX2/dockerfile
 LABEL org.opencontainers.image.description="Python, Rust, and C/C++ container for EEEN1XXX2 programming course"
 LABEL org.opencontainers.image.licenses=MIT
-
-
-# TODO:
-# Fix latest.
