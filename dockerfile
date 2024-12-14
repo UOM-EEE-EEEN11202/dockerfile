@@ -1,6 +1,6 @@
 # Set base OS
 # FROM ubuntu:latest
-FROM ubuntu:2
+FROM ubuntu:24.04
 
 # Install git, C/C++, and Python and requirements. (Rust is installed below)
 USER root
