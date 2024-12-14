@@ -1,6 +1,6 @@
 # Set base OS
-# FROM ubuntu:latest # should use this, but still picks up 22.04 for some reason, so hard coding to use 24.04 for now 
-FROM ubuntu:24.04
+FROM ubuntu:latest # should use this, but still picks up 22.04 for some reason, so hard coding to use 24.04 for now 
+# FROM ubuntu:24.04
 
 # Install git, C/C++, and Python and requirements. (Rust is installed below)
 USER root
