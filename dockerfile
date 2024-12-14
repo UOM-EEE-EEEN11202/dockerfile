@@ -1,5 +1,6 @@
 # Set base OS
-FROM ubuntu:latest
+# FROM ubuntu:latest
+FROM ubuntu:2
 
 # Install git, C/C++, and Python and requirements. (Rust is installed below)
 USER root
@@ -37,9 +38,9 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 
 # Install Rust and UV as user rather than as root. Makes the path/permissions easier
 USER ${USERNAME}
-RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y
+RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="~/.cargo/bin:${PATH}"
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="~/.local/bin:${PATH}"
 
 
