@@ -38,12 +38,17 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 
 # Install Rust and UV as user rather than as root. Makes the path/permissions easier
 USER ${USERNAME}
-RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y \
-    && curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y
 ENV PATH="~/.cargo/bin:${PATH}"
-ENV PATH="~/.local/bin:${PATH}"
-#ENV UV_COMPILE_BYTECODE=1
-ENV UV_LINK_MODE=copy
+
+# RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+# ENV PATH="~/.local/bin:${PATH}"
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+ENV UV_LINK_MODE=copy \
+    UV_COMPILE_BYTECODE=1 \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_PYTHON=python3.12 \
+    UV_PROJECT_ENVIRONMENT=/workspaces/project
 
 
 # Add meta-data
