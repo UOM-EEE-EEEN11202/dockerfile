@@ -42,6 +42,8 @@ RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -
     && curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="~/.cargo/bin:${PATH}"
 ENV PATH="~/.local/bin:${PATH}"
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
 
 # Add meta-data
