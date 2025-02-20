@@ -37,13 +37,15 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 
 
 # Set locale
-RUN update-locale LC_ALL=en_GB.UTF-8 LANG=en_GB.UTF-8
-
+RUN echo "export LC_ALL=en_GB.UTF-8" >> "/home/$USERNAME/.bashrc"
+RUN echo "export LANG=en_GB.UTF-8" >> "/home/$USERNAME/.bashrc"
+ 
 
 # Install Rust and UV as user rather than as root. Makes the path/permissions easier
 USER ${USERNAME}
 RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y
 ENV PATH="~/.cargo/bin:${PATH}"
+
 
 # If getting from script. We use a git container version instead
 # RUN curl -LsSf https://astral.sh/uv/install.sh | sh
