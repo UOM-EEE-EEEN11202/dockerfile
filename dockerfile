@@ -37,8 +37,8 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 
 
 # Set locale
-RUN echo "export LC_ALL=en_GB.UTF-8" >> "/home/$USERNAME/.bashrc"
-RUN echo "export LANG=en_GB.UTF-8" >> "/home/$USERNAME/.bashrc"
+RUN dpkg-reconfigure locales en_GB.UTF-8 
+#&& echo "export LC_ALL=en_GB.UTF-8" >> "/home/$USERNAME/.bashrc" && echo "export LANG=en_GB.UTF-8" >> "/home/$USERNAME/.bashrc"
  
 
 # Install Rust and UV as user rather than as root. Makes the path/permissions easier
