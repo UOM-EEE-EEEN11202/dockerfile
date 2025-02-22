@@ -37,25 +37,26 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
 
 
 # Set locale
-RUN dpkg-reconfigure locales en_GB.UTF-8 
-#&& echo "export LC_ALL=en_GB.UTF-8" >> "/home/$USERNAME/.bashrc" && echo "export LANG=en_GB.UTF-8" >> "/home/$USERNAME/.bashrc"
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
+RUN sed -i -e 's/# en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales && \
+    update-locale LANG=en_GB.UTF-8
+ENV LANG en_GB.UTF-8 
  
 
-# Install Rust and UV as user rather than as root. Makes the path/permissions easier
-USER ${USERNAME}
-RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y
-ENV PATH="~/.cargo/bin:${PATH}"
-
-
-# If getting from script. We use a git container version instead
-# RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-# ENV PATH="~/.local/bin:${PATH}"
+# Install UV
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_COMPILE_BYTECODE=1 \
     UV_PYTHON_DOWNLOADS=manual \
     UV_PYTHON=python3.12
 #   UV_PROJECT_ENVIRONMENT=/workspaces/project
+
+
+# Install Rust as user rather than as root. Makes the path/permissions easier
+USER ${USERNAME}
+RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y
+ENV PATH="~/.cargo/bin:${PATH}"
 
 
 # Add meta-data
