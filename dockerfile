@@ -61,6 +61,6 @@ ENV PATH="~/.cargo/bin:${PATH}"
 
 
 # Add meta-data
-LABEL org.opencontainers.image.source=https://github.com/UOM-EEE-EEEN1XXX2/dockerfile
-LABEL org.opencontainers.image.description="Python, Rust, and C/C++ container for EEEN1XXX2 programming course"
+LABEL org.opencontainers.image.source=https://github.com/UOM-EEE-EEEN11202/dockerfile
+LABEL org.opencontainers.image.description="Python, Rust, and C/C++ container for EEEN11202 programming course"
 LABEL org.opencontainers.image.licenses=MIT
