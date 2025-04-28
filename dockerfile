@@ -9,7 +9,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          build-essential gdb cmake cppcheck \
          git-all expect \
          curl \
-         python3.12 python3.12-venv python3-pip python-dev \
+         python3.12 python3.12-venv python3-pip python3.12-dev \
          jq \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 ENV RUNNING_IN_DOCKER=true
