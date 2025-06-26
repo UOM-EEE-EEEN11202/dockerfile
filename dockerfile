@@ -12,8 +12,16 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          python3.12 python3.12-venv python3-pip python3.12-dev \
          jq \
          dos2unix \
-    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
+    && apt-get install -y wget apt-transport-https software-properties-common \
+    && source /etc/os-release \
+    && wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb \
+    && rm packages-microsoft-prod.deb \
+    && sudo apt-get update \
+    &&sudo apt-get install -y powershell
 ENV RUNNING_IN_DOCKER=true
+
 
 
 # Remove default user ubuntu. Assumes using 23.04 or newer (no checks are present)
