@@ -58,12 +58,12 @@ ENV UV_LINK_MODE=copy \
 # Install PowerShell
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
     && apt-get -y install wget apt-transport-https software-properties-common \
-    && RUN source /etc/os-release \
+    && source /etc/os-release \
     && wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb \
-    && RUN dpkg -i packages-microsoft-prod.deb \
-    && RUN rm packages-microsoft-prod.deb \
-    && RUN apt-get update \
-    && RUN apt-get -y install powershell
+    && dpkg -i packages-microsoft-prod.deb \
+    && rm packages-microsoft-prod.deb \
+    && apt-get update \
+    && apt-get -y install powershell
 
 # Install Rust as user rather than as root. Makes the path/permissions easier
 USER ${USERNAME}
