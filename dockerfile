@@ -12,7 +12,15 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          python3.12 python3.12-venv python3-pip python3.12-dev \
          jq \
          dos2unix \
-    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
+    && apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
+    && apt-get -y install wget apt-transport-https software-properties-common \
+    && . /etc/os-release \
+    && wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb \
+    && rm packages-microsoft-prod.deb \
+    && apt-get update \
+    && apt-get -y install powershell
 ENV RUNNING_IN_DOCKER=true
 
 
@@ -54,16 +62,6 @@ ENV UV_LINK_MODE=copy \
     UV_PYTHON=python3.13
 #   UV_PROJECT_ENVIRONMENT=/workspaces/project
 
-
-# Install PowerShell
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
-    && apt-get -y install wget apt-transport-https software-properties-common \
-    && . /etc/os-release \
-    && wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb \
-    && rm packages-microsoft-prod.deb \
-    && apt-get update \
-    && apt-get -y install powershell
 
 # Install Rust as user rather than as root. Makes the path/permissions easier
 USER ${USERNAME}
