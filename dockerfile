@@ -51,14 +51,14 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_COMPILE_BYTECODE=1 \
     UV_PYTHON_DOWNLOADS=manual \
-    UV_PYTHON=python3.12
+    UV_PYTHON=python3.13
 #   UV_PROJECT_ENVIRONMENT=/workspaces/project
 
 
 # Install PowerShell
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
     && apt-get -y install wget apt-transport-https software-properties-common \
-    && source /etc/os-release \
+    && . /etc/os-release \
     && wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb \
     && rm packages-microsoft-prod.deb \
