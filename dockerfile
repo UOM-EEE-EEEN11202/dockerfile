@@ -16,17 +16,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 ENV RUNNING_IN_DOCKER=true
 
 
-# Install PowerShell
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive
-RUN apt-get -y install wget apt-transport-https software-properties-common
-RUN . /etc/os-release
-RUN wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb
-RUN dpkg -i packages-microsoft-prod.deb
-RUN rm packages-microsoft-prod.deb
-RUN apt-get update
-RUN apt-get -y install powershell
-
-
 # Remove default user ubuntu. Assumes using 23.04 or newer (no checks are present)
 RUN touch /var/mail/ubuntu \
     && chown ubuntu /var/mail/ubuntu \
@@ -65,6 +54,17 @@ ENV UV_LINK_MODE=copy \
     UV_PYTHON=python3.12
 #   UV_PROJECT_ENVIRONMENT=/workspaces/project
 
+
+# Install PowerShell
+SHELL ["/bin/bash", "-c"] 
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive
+RUN apt-get -y install wget apt-transport-https software-properties-common
+RUN . /etc/os-release
+RUN wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb
+RUN dpkg -i packages-microsoft-prod.deb
+RUN rm packages-microsoft-prod.deb
+RUN apt-get update
+RUN apt-get -y install powershell
 
 # Install Rust as user rather than as root. Makes the path/permissions easier
 USER ${USERNAME}
