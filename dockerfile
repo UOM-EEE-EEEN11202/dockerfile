@@ -58,7 +58,7 @@ ENV LANG en_GB.UTF-8
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_COMPILE_BYTECODE=1 \
-    UV_PYTHON_DOWNLOADS=manual \
+    UV_PYTHON_DOWNLOADS=automatic \
     UV_PYTHON=python3.13
 #   UV_PROJECT_ENVIRONMENT=/workspaces/project
 
