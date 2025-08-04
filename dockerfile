@@ -10,7 +10,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb \
     && rm packages-microsoft-prod.deb \
-    && apt-get -y install --no-install-recommends \
+    && apt-get update && apt-get -y install --no-install-recommends \
          build-essential gdb cmake cppcheck \
          git-all expect \
          curl \
@@ -49,16 +49,14 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
 RUN sed -i -e 's/# en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
     update-locale LANG=en_GB.UTF-8
-ENV LANG en_GB.UTF-8 
+ENV LANG=en_GB.UTF-8 
  
 
 # Install UV
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_COMPILE_BYTECODE=1 \
-    UV_PYTHON_DOWNLOADS=automatic \
-    UV_PYTHON=python3.13
-#   UV_PROJECT_ENVIRONMENT=/workspaces/project
+    UV_PYTHON_DOWNLOADS=automatic
 
 
 # Install Rust as user rather than as root. Makes the path/permissions easier
