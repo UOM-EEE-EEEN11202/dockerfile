@@ -4,11 +4,12 @@ FROM ubuntu:latest
 
 # Install git, C/C++, and Python and requirements. (Rust is installed below)
 USER root
-RUN . /etc/os-release \
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
+    && apt-get -y install --no-install-recommends wget apt-transport-https software-properties-common \
+    && . /etc/os-release \
     && wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb \
     && rm packages-microsoft-prod.deb \
-    && apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
          build-essential gdb cmake cppcheck \
          git-all expect \
@@ -16,7 +17,7 @@ RUN . /etc/os-release \
          python3.12 python3.12-venv python3-pip python3.12-dev \
          jq \
          dos2unix \
-         wget apt-transport-https software-properties-common powershell \
+         powershell \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
 ENV RUNNING_IN_DOCKER=true
 
