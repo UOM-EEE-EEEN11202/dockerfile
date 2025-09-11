@@ -73,4 +73,3 @@ LABEL org.opencontainers.image.source="https://github.com/UOM-EEE-EEEN11202/dock
 LABEL org.opencontainers.image.description="Python, Rust, and C/C++ container for EEEN11202 programming course"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.version="2526.0.0"
-
