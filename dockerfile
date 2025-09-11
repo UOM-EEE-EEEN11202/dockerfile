@@ -69,7 +69,7 @@ ENV PATH="~/.cargo/bin:${PATH}"
 # Add meta-data
 LABEL org.opencontainers.image.authors="Alex Casson, alex.casson@manchester.ac.uk"
 LABEL org.opencontainers.image.source=https://github.com/UOM-EEE-EEEN11202/dockerfile
-LABEL org.opencontainers.image.description="Python, Rust, and C/C++ container for EEEN11202 programming course"
+LABEL org.opencontainers.image.description "Python, Rust, and C/C++ container for EEEN11202 programming course"
 LABEL org.opencontainers.image.licenses=MIT
-LABEL org.opencontainers.image.version=2526.0.0
+LABEL org.opencontainers.image.version 2526.0.0
 
