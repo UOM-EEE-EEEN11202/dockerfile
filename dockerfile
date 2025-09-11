@@ -18,6 +18,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          jq \
          dos2unix \
          powershell \
+         texlive \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
 ENV RUNNING_IN_DOCKER=true
 
@@ -66,6 +67,9 @@ ENV PATH="~/.cargo/bin:${PATH}"
 
 
 # Add meta-data
+LABEL org.opencontainers.image.authors="Alex Casson, alex.casson@manchester.ac.uk"
 LABEL org.opencontainers.image.source=https://github.com/UOM-EEE-EEEN11202/dockerfile
 LABEL org.opencontainers.image.description="Python, Rust, and C/C++ container for EEEN11202 programming course"
 LABEL org.opencontainers.image.licenses=MIT
+LABEL org.opencontainers.image.version=2526.0.0
+
