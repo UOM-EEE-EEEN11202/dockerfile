@@ -27,7 +27,7 @@ jobs:
         run: |
           pwd
           ls -la
-          VER=$(grep org.opencontainers.image.version ${{ github.action_path }}/dockerfile | cut -d'"' -f 2)
+          VER=$(grep org.opencontainers.image.version ${{ github.workspace }}/dockerfile | cut -d'"' -f 2)
           echo "VERSION=$VER" >> $GITHUB_ENV
       
       - name: Checkout repository
