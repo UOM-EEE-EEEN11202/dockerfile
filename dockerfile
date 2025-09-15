@@ -18,8 +18,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          jq \
          dos2unix \
          powershell \
-         texlive-latex-extra \
-         latexmk \
+         texlive-latex-reccomended texlive-pdfx texlive-luatex85 latexmk \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
 ENV RUNNING_IN_DOCKER=true
 
