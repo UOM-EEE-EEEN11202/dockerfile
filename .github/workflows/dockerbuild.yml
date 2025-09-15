@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Set variables
         run: |
-          VER=$(grep org.opencontainers.image.version dockerfile | cut -d'"' -f 2)
+          VER=$(grep org.opencontainers.image.version $GITHUB_WORKSPACE/dockerfile | cut -d'"' -f 2)
           echo "VERSION=$VER" >> $GITHUB_ENV
       
       - name: Checkout repository
