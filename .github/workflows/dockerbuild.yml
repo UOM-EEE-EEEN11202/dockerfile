@@ -22,17 +22,15 @@ jobs:
       attestations: write
       id-token: write
       # 
-    steps:
-      - name: Set variables
-        run: |
-          pwd
-          ls -R ../../../
-          VER=$(grep org.opencontainers.image.version ${{ github.workspace }}/dockerfile | cut -d'"' -f 2)
-          echo "VERSION=$VER" >> $GITHUB_ENV
-      
+    steps:     
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set variables
+        run: |
+          VER=$(grep org.opencontainers.image.version ${{ github.workspace }}/dockerfile | cut -d'"' -f 2)
+          echo "VERSION=$VER" >> $GITHUB_ENV
+          
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
