@@ -26,7 +26,7 @@ jobs:
       - name: Set variables
         run: |
           pwd
-          ls -la
+          ls -la ../
           VER=$(grep org.opencontainers.image.version ${{ github.workspace }}/dockerfile | cut -d'"' -f 2)
           echo "VERSION=$VER" >> $GITHUB_ENV
       
