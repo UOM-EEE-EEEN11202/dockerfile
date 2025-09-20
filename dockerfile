@@ -12,7 +12,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && rm packages-microsoft-prod.deb \
     && apt-get update && apt-get -y install --no-install-recommends \
          build-essential gdb cmake cppcheck \
-         clang lld llvm \
+         clang lld llvm lldb lldb-server lldb-vscode \
          git-all expect \
          curl \
          python3.12 python3.12-venv python3-pip python3.12-dev \
