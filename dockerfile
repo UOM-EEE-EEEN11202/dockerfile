@@ -19,7 +19,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          jq \
          dos2unix \
          powershell \
-         npm \
          texlive-latex-extra texlive-fonts-recommended texlive-extra-utils latexmk \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
 ENV RUNNING_IN_DOCKER=true
