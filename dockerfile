@@ -17,9 +17,10 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          curl \
          python3.12 python3.12-venv python3-pip python3.12-dev \
          jq \
+         vim \
          dos2unix \
          powershell \
-         texlive-latex-extra texlive-fonts-recommended texlive-extra-utils latexmk \
+         texlive-latex-recommended texlive-fonts-recommended texlive-extra-utils latexmk \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
 ENV RUNNING_IN_DOCKER=true
 
