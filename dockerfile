@@ -19,7 +19,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          jq \
          vim \
          dos2unix \
-         powershell \
          texlive-latex-recommended texlive-fonts-recommended texlive-extra-utils latexmk \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
 ENV RUNNING_IN_DOCKER=true
@@ -70,7 +69,7 @@ ENV PATH="~/.cargo/bin:${PATH}"
 
 
 # Add meta-data
-LABEL org.opencontainers.image.version="v2526.1.0" \
+LABEL org.opencontainers.image.version="v2526.2.0" \
       org.opencontainers.image.authors="Alex Casson <alex.casson@manchester.ac.uk>" \
       org.opencontainers.image.title="EEEN11202 dockerfile" \
       org.opencontainers.image.source="https://github.com/UOM-EEE-EEEN11202/dockerfile" \
