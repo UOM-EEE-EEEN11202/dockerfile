@@ -5,12 +5,8 @@ FROM ubuntu:latest
 # Install git, C/C++, and Python and requirements. (Rust is installed below)
 USER root
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
-    && apt-get -y install --no-install-recommends wget apt-transport-https software-properties-common \
-    && . /etc/os-release \
-    && wget -q https://packages.microsoft.com/config/ubuntu/$VERSION_ID/packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb \
-    && rm packages-microsoft-prod.deb \
     && apt-get update && apt-get -y install --no-install-recommends \
+         wget apt-transport-https software-properties-common \
          build-essential gdb cmake cppcheck \
          clang clangd lld llvm lldb \
          git-all expect \
@@ -61,14 +57,19 @@ ENV UV_LINK_MODE=copy \
     UV_PYTHON_DOWNLOADS=automatic
 
 
-# Install Rust as user rather than as root. Makes the path/permissions easier
-USER ${USERNAME}
-RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y
-ENV PATH="~/.cargo/bin:${PATH}"
+# Install Rust for all users. Uses the standalone installer
+ARG RUST_VERSION=1.93.0
+ARG RUST_WEB=https://static.rust-lang.org/dist/rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz
+RUN wget ${RUST_WEB} && \
+    tar xf `basename ${RUST_WEB}` && \
+    cd `basename ${RUST_WEB} .tar.gz` && \
+    ./install.sh && \
+    cd - && \
+    rm -rf `basename ${RUST_WEB} .tar.gz`
 
 
 # Add meta-data
-LABEL org.opencontainers.image.version="v2526.3.0" \
+LABEL org.opencontainers.image.version="v2526.4.0" \
       org.opencontainers.image.authors="Alex Casson <alex.casson@manchester.ac.uk>" \
       org.opencontainers.image.title="EEEN11202 dockerfile" \
       org.opencontainers.image.source="https://github.com/UOM-EEE-EEEN11202/dockerfile" \
