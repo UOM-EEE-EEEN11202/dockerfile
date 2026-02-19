@@ -2,22 +2,6 @@
 FROM ubuntu:latest
 # FROM ubuntu:24.04
 
-# Install git, C/C++, and Python and requirements. (Rust is installed below)
-USER root
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
-    && apt-get update && apt-get -y install --no-install-recommends \
-         wget apt-transport-https software-properties-common \
-         build-essential gdb cmake cppcheck \
-         clang clangd lld llvm lldb \
-         git-all expect \
-         curl \
-         python3.12 python3.12-venv python3-pip python3.12-dev \
-         jq \
-         vim \
-         dos2unix \
-    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
-ENV RUNNING_IN_DOCKER=true
-
 
 # Remove default user ubuntu. Assumes using 23.04 or newer (no checks are present)
 RUN touch /var/mail/ubuntu \
@@ -47,25 +31,39 @@ RUN sed -i -e 's/# en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
     update-locale LANG=en_GB.UTF-8
 ENV LANG=en_GB.UTF-8 
- 
+
+
+# Install git, C/C++, and Python and requirements. (Rust is installed below)
+USER root
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
+    && apt-get update && apt-get -y install --no-install-recommends \
+         wget apt-transport-https software-properties-common \
+         build-essential gdb cmake cppcheck \
+         clang clangd lld llvm lldb \
+         git-all expect \
+         curl \
+         python3.12 python3.12-venv python3-pip python3.12-dev \
+         jq \
+         vim \
+         dos2unix \
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
+ENV RUNNING_IN_DOCKER=true
+
 
 # Install UV
+ARG PYTHON_VERSION=3.14
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_COMPILE_BYTECODE=1 \
-    UV_PYTHON=python3.14 \
+    UV_PYTHON=python${PYTHON_VERSION} \
     UV_PYTHON_DOWNLOADS=automatic
 
 
-# Install Rust for all users. Uses the standalone installer
+# Install Rust as user rather than as root. Makes the path/permissions easier
 ARG RUST_VERSION=1.93.0
-ARG RUST_WEB=https://static.rust-lang.org/dist/rust-${RUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz
-RUN wget ${RUST_WEB} && \
-    tar xf `basename ${RUST_WEB}` && \
-    cd `basename ${RUST_WEB} .tar.gz` && \
-    ./install.sh && \
-    cd - && \
-    rm -rf `basename ${RUST_WEB} .tar.gz`
+USER ${USERNAME}
+RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y --default-toolchain=${RUST_VERSION}
+ENV PATH="~/.cargo/bin:${PATH}"
 
 
 # Add meta-data
