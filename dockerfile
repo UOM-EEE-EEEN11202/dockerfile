@@ -54,7 +54,6 @@ ENV RUNNING_IN_DOCKER=true
 ARG PYTHON_VERSION=3.14
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
-    UV_COMPILE_BYTECODE=1 \
     UV_PYTHON=python${PYTHON_VERSION} \
     UV_PYTHON_DOWNLOADS=automatic
 
