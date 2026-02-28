@@ -40,7 +40,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          wget apt-transport-https software-properties-common \
          build-essential gdb cmake cppcheck \
          clang clangd lld llvm lldb \
-         libcunit1 libcunit1-dev libcunit1-doc \
          git-all expect \
          curl \
          python3.12 python3.12-venv python3-pip python3.12-dev \
@@ -67,7 +66,7 @@ ENV PATH="~/.cargo/bin:${PATH}"
 
 
 # Add meta-data
-LABEL org.opencontainers.image.version="v2526.5.0" \
+LABEL org.opencontainers.image.version="v2526.4.0" \
       org.opencontainers.image.authors="Alex Casson <alex.casson@manchester.ac.uk>" \
       org.opencontainers.image.title="EEEN11202 dockerfile" \
       org.opencontainers.image.source="https://github.com/UOM-EEE-EEEN11202/dockerfile" \
