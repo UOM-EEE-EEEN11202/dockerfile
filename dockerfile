@@ -39,7 +39,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get update && apt-get -y install --no-install-recommends \
          wget apt-transport-https software-properties-common \
          build-essential gdb cmake cppcheck \
-         clang clangd lld llvm lldb \
+         clang clangd lld-21 llvm-21 lldb-21 \
          libcunit1 libcunit1-dev libcunit1-doc \
          git-all expect \
          curl \
@@ -67,7 +67,7 @@ ENV PATH="~/.cargo/bin:${PATH}"
 
 
 # Add meta-data
-LABEL org.opencontainers.image.version="v2526.5.0" \
+LABEL org.opencontainers.image.version="v2526.6.0" \
       org.opencontainers.image.authors="Alex Casson <alex.casson@manchester.ac.uk>" \
       org.opencontainers.image.title="EEEN11202 dockerfile" \
       org.opencontainers.image.source="https://github.com/UOM-EEE-EEEN11202/dockerfile" \
