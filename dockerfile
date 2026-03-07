@@ -64,7 +64,7 @@ ENV UV_LINK_MODE=copy \
 # Install LLVM. Done here to use v21 which isn't in ubunut 24.04
 RUN wget https://apt.llvm.org/llvm.sh && \
     chmod +x llvm.sh && \
-    sudo ./llvm.sh 21
+    ./llvm.sh 21
 
 
 # Install Rust as user rather than as root. Makes the path/permissions easier
