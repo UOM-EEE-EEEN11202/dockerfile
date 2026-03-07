@@ -39,6 +39,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get update && apt-get -y install --no-install-recommends \
          wget apt-transport-https software-properties-common \
          build-essential gdb cmake cppcheck \
+         clang clangd lld llvm lldb \
          libcunit1 libcunit1-dev libcunit1-doc \
          git-all expect \
          curl \
@@ -48,9 +49,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          dos2unix \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
 ENV RUNNING_IN_DOCKER=true
-
-# Add when ubuntu has llvm 21 or newer 
-#clang clangd lld llvm lldb \
 
 
 # Install UV
