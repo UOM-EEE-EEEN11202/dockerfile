@@ -39,7 +39,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get update && apt-get -y install --no-install-recommends \
          wget apt-transport-https software-properties-common \
          build-essential gdb cmake cppcheck \
-         clang clangd lld-21 llvm-21 lldb-21 \
          libcunit1 libcunit1-dev libcunit1-doc \
          git-all expect \
          curl \
@@ -50,6 +49,9 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
 ENV RUNNING_IN_DOCKER=true
 
+# Add when ubuntu has llvm 21 or newer 
+#clang clangd lld llvm lldb \
+
 
 # Install UV
 ARG PYTHON_VERSION=3.14
@@ -57,6 +59,12 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_PYTHON=python${PYTHON_VERSION} \
     UV_PYTHON_DOWNLOADS=automatic
+
+
+# Install LLVM. Done here to use v21 which isn't in ubunut 24.04
+RUN wget https://apt.llvm.org/llvm.sh && \
+    chmod +x llvm.sh && \
+    sudo ./llvm.sh 21
 
 
 # Install Rust as user rather than as root. Makes the path/permissions easier
