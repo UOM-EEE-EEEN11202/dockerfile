@@ -38,12 +38,12 @@ USER root
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
     && apt-get update && apt-get -y install --no-install-recommends \
          wget apt-transport-https software-properties-common \
-         build-essential gdb cmake cppcheck \
+         # build-essential gdb cppcheck \
+         cmake \\
          clang clangd lld llvm lldb \
-         libcunit1 libcunit1-dev libcunit1-doc \
          git-all expect \
          curl \
-         python3.12 python3.12-venv python3-pip python3.12-dev \
+         # python3.12 python3.12-venv python3-pip python3.12-dev \
          jq \
          vim \
          dos2unix \
@@ -59,16 +59,16 @@ ENV UV_LINK_MODE=copy \
     UV_PYTHON_DOWNLOADS=automatic
 
 
-# Install LLVM. Done here to use v21 which isn't in ubunut 24.04
-RUN wget https://apt.llvm.org/llvm.sh && \
-    chmod +x llvm.sh && \
-    ./llvm.sh 21
+# # Install LLVM. Done here to use v21 which isn't in ubunut 24.04
+# RUN wget https://apt.llvm.org/llvm.sh && \
+#    chmod +x llvm.sh && \
+#    ./llvm.sh 21
 
 
 # Install Rust as user rather than as root. Makes the path/permissions easier
 ARG RUST_VERSION=1.93.0
 USER ${USERNAME}
-RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y --default-toolchain=${RUST_VERSION}
+RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y --default-toolchain=${RUST_VERSION} --profile=minimal
 ENV PATH="~/.cargo/bin:${PATH}"
 
 
