@@ -38,12 +38,12 @@ USER root
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
     && apt-get update && apt-get -y install --no-install-recommends \
          wget apt-transport-https software-properties-common \
-         # build-essential gdb \
+         build-essential gdb \
          cmake \
          clang clangd lld llvm lldb \
          git-all expect \
          curl \
-         # python3.12 python3.12-venv python3-pip python3.12-dev \
+         python3.12 python3.12-venv python3-pip python3.12-dev \
          jq \
          vim \
          dos2unix \
