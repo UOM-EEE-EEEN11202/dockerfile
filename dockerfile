@@ -38,8 +38,8 @@ USER root
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
     && apt-get update && apt-get -y install --no-install-recommends \
          wget apt-transport-https software-properties-common \
-         # build-essential gdb cppcheck \
-         cmake \\
+         # build-essential gdb \
+         cmake \
          clang clangd lld llvm lldb \
          git-all expect \
          curl \
