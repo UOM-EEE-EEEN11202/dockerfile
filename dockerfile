@@ -67,6 +67,11 @@ RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -
 ENV PATH="~/.cargo/bin:${PATH}"
 
 
+# Install venv
+USER ${USERNAME}
+RUN cd ~ && uv venv .venv && uv pip install numpy scipy ipykernel==6.31.0 pytest matplotlib  plotly polars
+
+
 # Turn off internet for exam
 #USER root
 #RUN iptables -P INPUT DROP
