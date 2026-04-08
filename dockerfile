@@ -59,12 +59,6 @@ ENV UV_LINK_MODE=copy \
     UV_PYTHON_DOWNLOADS=automatic
 
 
-# # Install LLVM. Done here to use v21 which isn't in ubunut 24.04
-# RUN wget https://apt.llvm.org/llvm.sh && \
-#    chmod +x llvm.sh && \
-#    ./llvm.sh 21
-
-
 # Install Rust as user rather than as root. Makes the path/permissions easier
 ARG RUST_VERSION=1.93.0
 USER ${USERNAME}
@@ -72,8 +66,14 @@ RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -
 ENV PATH="~/.cargo/bin:${PATH}"
 
 
+# Turn off internet for exam
+User root
+RUN iptables -A OUTPUT -m owner --uid-owner $USERNAME -j REJECT
+USER ${USERNAME}
+
+
 # Add meta-data
-LABEL org.opencontainers.image.version="v2526.6.0" \
+LABEL org.opencontainers.image.version="v2526.7.0" \
       org.opencontainers.image.authors="Alex Casson <alex.casson@manchester.ac.uk>" \
       org.opencontainers.image.title="EEEN11202 dockerfile" \
       org.opencontainers.image.source="https://github.com/UOM-EEE-EEEN11202/dockerfile" \
