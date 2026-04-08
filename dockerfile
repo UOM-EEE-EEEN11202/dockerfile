@@ -67,7 +67,7 @@ ENV PATH="~/.cargo/bin:${PATH}"
 
 
 # Turn off internet for exam
-User root
+USER root
 RUN iptables -A OUTPUT -m owner --uid-owner $USERNAME -j REJECT
 USER ${USERNAME}
 
