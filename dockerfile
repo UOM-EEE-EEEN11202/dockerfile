@@ -68,10 +68,10 @@ ENV PATH="~/.cargo/bin:${PATH}"
 
 
 # Turn off internet for exam
-USER root
-RUN iptables -P INPUT DROP
-RUN iptables -I DOCKER-USER -p tcp --dport 80 -j DROP
-USER ${USERNAME}
+#USER root
+#RUN iptables -P INPUT DROP
+#RUN iptables -I DOCKER-USER -p tcp --dport 80 -j DROP
+#USER ${USERNAME}
 
 
 # Add meta-data
