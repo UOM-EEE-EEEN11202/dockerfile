@@ -47,6 +47,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          jq \
          vim \
          dos2unix \
+         iptables \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
 ENV RUNNING_IN_DOCKER=true
 
@@ -68,7 +69,7 @@ ENV PATH="~/.cargo/bin:${PATH}"
 
 # Turn off internet for exam
 USER root
-RUN iptables -A OUTPUT -m owner --uid-owner $USERNAME -j REJECT
+RUN iptables -A OUTPUT -m owner --uid-owner ${USERNAME} -j REJECT
 USER ${USERNAME}
 
 
