@@ -1,6 +1,6 @@
 # Set base OS
-FROM ubuntu:latest
-# FROM ubuntu:24.04
+# FROM ubuntu:latest
+FROM ubuntu:26.04
 
 
 # Remove default user ubuntu. Assumes using 23.04 or newer (no checks are present)
@@ -43,11 +43,10 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
          clang clangd lld llvm lldb \
          git-all expect \
          curl \
-         python3.12 python3.12-venv python3-pip python3.12-dev \
+         python3.14 python3.14-venv python3-pip python3.14-dev \
          jq \
          vim \
-         dos2unix \
-         iptables ufw git-lfs \
+         dos2unix
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
 ENV RUNNING_IN_DOCKER=true
 
@@ -61,26 +60,14 @@ ENV UV_LINK_MODE=copy \
 
 
 # Install Rust as user rather than as root. Makes the path/permissions easier
-ARG RUST_VERSION=1.93.0
+ARG RUST_VERSION=1.95.0
 USER ${USERNAME}
 RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y --default-toolchain=${RUST_VERSION} --profile=minimal
 ENV PATH="~/.cargo/bin:${PATH}"
 
 
-# Install venv
-USER ${USERNAME}
-RUN cd ~ && uv venv .venv && uv pip install numpy scipy ipykernel==6.31.0 pytest matplotlib  plotly polars
-
-
-# Turn off internet for exam
-#USER root
-#RUN iptables -P INPUT DROP
-#RUN iptables -I DOCKER-USER -p tcp --dport 80 -j DROP
-#USER ${USERNAME}
-
-
 # Add meta-data
-LABEL org.opencontainers.image.version="v2526.7.0" \
+LABEL org.opencontainers.image.version="v26.5.20" \
       org.opencontainers.image.authors="Alex Casson <alex.casson@manchester.ac.uk>" \
       org.opencontainers.image.title="EEEN11202 dockerfile" \
       org.opencontainers.image.source="https://github.com/UOM-EEE-EEEN11202/dockerfile" \
