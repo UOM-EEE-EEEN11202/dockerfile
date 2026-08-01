@@ -1,6 +1,21 @@
+# Set versions
+ARG UV_VERSION=0.12.1
+ARG PYTHON_VERSION=3.14
+ARG RUST_VERSION=1.97.0
+ARG UBUNTU_VERSION=26.04
+# ARG UBUNTU_VERSION=latest
+
+
+# Set default username. Devcontainer need to match this with the user in devcontainer.json for correct permissions
+ARG USERNAME=vscode
+
+
+# Dedicated stage for uv binary (workaround for COPY --from variable expansion limits)
+FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv-binary
+
+
 # Set base OS
-FROM ubuntu:26.04
-# FROM ubuntu:latest
+FROM ubuntu:${UBUNTU_VERSION}
 
 
 # Use a stricter shell for RUN commands.
@@ -8,7 +23,6 @@ SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 
 # Set user of the container.
-ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=${USER_UID}
 RUN groupadd --gid "${USER_GID}" "${USERNAME}" \
@@ -16,7 +30,6 @@ RUN groupadd --gid "${USER_GID}" "${USERNAME}" \
 
 
 # Install git, C/C++, Python, and locale setup in one layer.
-ARG PYTHON_VERSION=3.14
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -50,16 +63,14 @@ RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhisto
     && echo "${SNIPPET}" >> "/home/${USERNAME}/.bashrc"
 
 
-# Install uv from a pinned image tag for better reproducibility.
-ARG UV_VERSION=0.12.1
-COPY --from=ghcr.io/astral-sh/uv:${UV_VERSION} /uv /usr/local/bin/uv
+# Install uv from a pinned image stage for better reproducibility.
+COPY --from=uv-binary /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_PYTHON=python${PYTHON_VERSION} \
     UV_PYTHON_DOWNLOADS=automatic
 
 
 # Install Rust as user rather than as root. Makes path/permissions easier.
-ARG RUST_VERSION=1.97.0
 USER ${USERNAME}
 RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y --default-toolchain="${RUST_VERSION}" --profile=minimal
 ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
