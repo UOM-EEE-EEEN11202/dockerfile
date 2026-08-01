@@ -1,73 +1,72 @@
 # Set base OS
-# FROM ubuntu:latest
 FROM ubuntu:26.04
+# FROM ubuntu:latest
 
 
-# Remove default user ubuntu. Assumes using 23.04 or newer (no checks are present)
-RUN touch /var/mail/ubuntu \
-    && chown ubuntu /var/mail/ubuntu \
-    && userdel -r ubuntu
+# Use a stricter shell for RUN commands.
+SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 
-# Set user of the container
-ARG USERNAME=vscode	
+# Set user of the container.
+ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=${USER_UID}
-RUN groupadd --gid ${USER_GID} ${USERNAME} \
-    && useradd --uid ${USER_UID} --gid ${USER_GID} -m ${USERNAME}
-
-	
-# Used to persist bash history as per https://code.visualstudio.com/remote/advancedcontainers/persist-bash-history
-RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
-    && mkdir /commandhistory \
-    && touch /commandhistory/.bash_history \
-    && chown -R $USERNAME /commandhistory \
-    && echo "$SNIPPET" >> "/home/$USERNAME/.bashrc"
+RUN groupadd --gid "${USER_GID}" "${USERNAME}" \
+    && useradd --uid "${USER_UID}" --gid "${USER_GID}" -m "${USERNAME}"
 
 
-# Set locale
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
-RUN sed -i -e 's/# en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/' /etc/locale.gen && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=en_GB.UTF-8
-ENV LANG=en_GB.UTF-8 
-
-
-# Install git, C/C++, and Python and requirements. (Rust is installed below)
-USER root
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \ 
-    && apt-get update && apt-get -y install --no-install-recommends \
-         wget apt-transport-https software-properties-common \
-         build-essential gdb \
-         cmake \
-         clang clangd lld llvm lldb \
-         git-all expect \
-         curl \
-         python3.14 python3.14-venv python3-pip python3.14-dev \
-         jq \
-         vim \
-         dos2unix
-    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* \
+# Install git, C/C++, Python, and locale setup in one layer.
+ARG PYTHON_VERSION=3.14
+RUN export DEBIAN_FRONTEND=noninteractive \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        locales \
+        wget \
+        build-essential gdb \
+        cmake \
+        clang clangd lld llvm lldb \
+        git expect \
+        curl \
+        "python${PYTHON_VERSION}" "python${PYTHON_VERSION}-venv" "python${PYTHON_VERSION}-dev" python3-pip \
+        jq \
+        vim \
+        dos2unix \
+    && sed -i -e 's/# en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/' /etc/locale.gen \
+    && dpkg-reconfigure --frontend=noninteractive locales \
+    && update-locale LANG=en_GB.UTF-8 \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+ENV LANG=en_GB.UTF-8
 ENV RUNNING_IN_DOCKER=true
 
 
-# Install UV
-ARG PYTHON_VERSION=3.14
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+# Used to persist bash history as per
+# https://code.visualstudio.com/remote/advancedcontainers/persist-bash-history
+RUN SNIPPET="export PROMPT_COMMAND='history -a' && export HISTFILE=/commandhistory/.bash_history" \
+    && mkdir /commandhistory \
+    && touch /commandhistory/.bash_history \
+    && chown -R "${USERNAME}" /commandhistory \
+    && echo "${SNIPPET}" >> "/home/${USERNAME}/.bashrc"
+
+
+# Install uv from a pinned image tag for better reproducibility.
+ARG UV_VERSION=0.12.1
+COPY --from=ghcr.io/astral-sh/uv:${UV_VERSION} /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_PYTHON=python${PYTHON_VERSION} \
     UV_PYTHON_DOWNLOADS=automatic
 
 
-# Install Rust as user rather than as root. Makes the path/permissions easier
-ARG RUST_VERSION=1.95.0
+# Install Rust as user rather than as root. Makes path/permissions easier.
+ARG RUST_VERSION=1.97.0
 USER ${USERNAME}
-RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y --default-toolchain=${RUST_VERSION} --profile=minimal
-ENV PATH="~/.cargo/bin:${PATH}"
+RUN curl --proto "https" --tlsv1.2 https://sh.rustup.rs -sSf | /bin/bash -s -- -y --default-toolchain="${RUST_VERSION}" --profile=minimal
+ENV PATH="/home/${USERNAME}/.cargo/bin:${PATH}"
 
 
 # Add meta-data
-LABEL org.opencontainers.image.version="v26.5.20" \
+LABEL org.opencontainers.image.version="v2627.0.0" \
       org.opencontainers.image.authors="Alex Casson <alex.casson@manchester.ac.uk>" \
       org.opencontainers.image.title="EEEN11202 dockerfile" \
       org.opencontainers.image.source="https://github.com/UOM-EEE-EEEN11202/dockerfile" \
