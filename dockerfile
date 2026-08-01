@@ -18,6 +18,12 @@ FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv-binary
 FROM ubuntu:${UBUNTU_VERSION}
 
 
+# Re-declare build args in this stage so RUN/ENV/USER can expand them.
+ARG PYTHON_VERSION
+ARG RUST_VERSION
+ARG USERNAME
+
+
 # Use a stricter shell for RUN commands.
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
