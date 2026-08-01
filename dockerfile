@@ -22,6 +22,12 @@ FROM ubuntu:${UBUNTU_VERSION}
 SHELL ["/bin/bash", "-euo", "pipefail", "-c"]
 
 
+# Remove default user ubuntu. Assumes using 23.04 or newer (no checks are present)
+RUN touch /var/mail/ubuntu \
+    && chown ubuntu /var/mail/ubuntu \
+    && userdel -r ubuntu
+
+    
 # Set user of the container.
 ARG USER_UID=1000
 ARG USER_GID=${USER_UID}
